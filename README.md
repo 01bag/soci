@@ -138,21 +138,23 @@ python3 algorithm_test.py
     compute sdot function, its running time is ------ 63.487300ms
     q_g_dist=[[ 7.8 11.4 15.  18.6 22.2]]
     ---------------------------
-    
 # Performance
-We used different KEY_LEN_BIT to test the performance of each function. The experimental environment is a laptop with CPU 11th Gen Intel(R) Core(TM) i5-11400H @ 2.70GHz and 2.69 GHz, and 16G memory. The experimental results are as follows:  
-|**Length of key in bit**| **KEY_LEN_BIT**|**256**|**378**|**512**|**640**| **768** | **896** | **1024**|
+We used different KEY_LEN_BIT to test the performance of each function. The experimental environment is a laptop with CPU 10th Gen Intel(R) Core(TM) i5-10210U, 2 cores @ 2.70GHz and 2 cores @ 2.69 GHz, and 16G memory. The experimental results are as follows:
+|**Length of key in bit**| **KEY_LEN_BIT**|**256**|**384**|**512**|**640**| **768** | **896** | **1024**|
 | ------ | ------ | ------ | ------ |------ |------ |  ------ |------ |------ |
-| PaillierTD Encryption	| encrypt	| 0.30902	| 0.80433	| 1.80521	| 3.17866	| 4.76628	| 7.47308	| 11.45192| 
-| PaillierTD Decryption	| decrypt	| 0.16383	| 0.33325	| 0.62212	| 0.96123	| 1.70479	| 2.30342	| 3.34627| 
-| Secure Addition	| add	| 0.0036	| 0.00526	| 0.00748	| 0.01032	| 0.016	| 0.01897	| 0.02151| 
-| Secure Scalar Multiplication	| scl_mul	| 0.0353	| 0.06927	| 0.11789	| 0.13723	| 0.2	| 0.25645	| 0.33941| 
-| Secure Multiplication	| SMUL	| 2.435900 	| 5.48869	| 12.58865	| 21.20593	| 35.70454	| 52.30443	| 77.34762| 
-| Secure Comparison	| SCMP	| 1.80717	| 4.49447	| 10.57887	| 19.01199	| 31.6157	| 45.65125	| 67.05078| 
-| Secure Dot Production	| SDOT	| 67.65595	| 160.47902	| 349.94368	| 597.88933	| 980.26193	| 1479.99607	| 2208.06627| 
+| 	PaillierTD Encryption		| 	encrypt	| 	0.31158	| 	0.890245	| 	1.69446	| 	2.727275	| 	4.531075	| 	6.54862	| 	10.222125	| 
+| 	PaillierTD Decryption		| 	decrypt	| 	0.23807	| 	0.664915	| 	1.356725	| 	2.529825	| 	4.40573	| 	6.728625	| 	9.666675	| 
+| 	Secure Addition		| 	add	| 	0.007285	| 	0.01436	| 	0.020015	| 	0.02415	| 	0.03977	| 	0.061285	| 	0.063205	| 
+| 	Secure Scalar Multiplication		| 	scl_mul	| 	0.016645	| 	0.03404	| 	0.051585	| 	0.07038	| 	0.09575	| 	0.13957	| 	0.17699	| 
+| 	Secure Multiplication	| 	SMUL	| 	2.375615 	| 	7.676255	| 	18.56232	| 	33.735535	| 	63.27857	| 	74.16896	| 	109.29592	| 
+| 	Secure Comparison		| 	SCMP	| 	1.385825	| 	4.3059	| 	8.687665	| 	16.568485	| 	27.034525	| 	42.45019	| 	58.41245	| 
+| 	Secure Dot Production		| 	SDOT	| 	46.267135	| 	146.16107	| 	292.701925	| 	580.94016	| 	946.897805	| 	1594.465575	| 	2083.95945	| 
+
+
 
 
 The time unit is ms.
+
 
 # Benchmark
 in funtion generate_paillier_keypair(n_length,sigma_length), you can change the value of KEY_LEN_BIT and SIGMA_LEN_BIT . KEY_LEN_BIT determine the big prime's length in bit, and  SIGMA_LEN_BIT determine the length of $sk_1$ in bit. 
