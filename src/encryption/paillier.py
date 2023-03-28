@@ -344,7 +344,7 @@ class PaillierPrivateKey(object):
         self.p_inverse = invert(self.p, self.q)
         self.hp = self.h_function(self.p, self.psquare)
         self.hq = self.h_function(self.q, self.qsquare)
-        self.lamda=(self.p-1)*(self.q-1)#self.lcm((self.p)-1,(self.q)-1)
+        self.lamda=(self.p-1)*(self.q-1)
         self.nsquare=public_key.n*public_key.n
         self.u=invert(self.lamda,self.public_key.n)
 
@@ -478,15 +478,6 @@ class PaillierPrivateKey(object):
         """Computes the L function as defined in Paillier's paper. That is: L(x,p) = (x-1)/p"""
         return (x - 1) // p
 
-    def lcm(self,m, n):
-        if m < n:
-            m, n = n, m
-        r = m % n
-        while r:
-            m = n
-            n = r
-            r = m % n
-        return n
     def crt(self, mp, mq):
         """The Chinese Remainder Theorem as needed for decryption. Returns the solution modulo n=pq.
 
