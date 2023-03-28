@@ -124,11 +124,13 @@ def scmp_test(f_x,f_y):
     t = time.perf_counter() - starTim
     print("compute scmp function, its running time is ------ ", time.perf_counter() - starTim)
     return a[1]
-sum=0.0
-print('c= ',random.getrandbits(256))
-for i in range(20):
- sum+=__mul__test(5429496723,9949672)
-print(sum/20.0)
+# sum=0.0
+# print('c= ',random.getrandbits(256))
+# for i in range(20):
+#  sum+=__mul__test(5429496723,9949672)
+# print(sum/20.0)
+
+smul_test(12,12)
 
 '''
 encrypt_test(random.getrandbits(256))

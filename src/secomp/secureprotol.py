@@ -100,7 +100,6 @@ class SecureComputing(object):
                 ciphertexts.append((eXY[i] + (elist[2*i] * - rlist[2*i+1]) + (elist[2*i+1] * -rlist[2*i]) - er1_mul_r2))
 
         return ciphertexts
-
     def smul(self, ev1, ev2, sigm_len=None):
 
         if ev1.public_key != ev2.public_key:
@@ -125,16 +124,17 @@ class SecureComputing(object):
 
             ev1_add_r1 = ev1 + er1
             ev2_add_r2 = ev2 + er2
+            X1 = self.cp.partial_decrypt(ev1_add_r1)
+            Y1=  self.cp.partial_decrypt(ev2_add_r2)
             eRes = (ev1_add_r1 * L) + ev2_add_r2
-            eRes1 = self.cp.partial_decrypt(eRes)
             sum_time = time.perf_counter() - starTim
 
             # Step-2
             starTim = time.perf_counter()
-            eRes2 = self.csp.partial_decrypt(eRes)
-            Res = self.csp.final_decrypt(eRes1, eRes2)
-            x_add_r1 = Res // L
-            y_add_r2 = Res % L
+            X2 = self.csp.partial_decrypt(ev1_add_r1)
+            Y2=self.csp.partial_decrypt(ev2_add_r2)
+            x_add_r1 = self.csp.final_decrypt(X1,X2)
+            y_add_r2 = self.csp.final_decrypt(Y1,Y2)
             ex_add_r1_mul_y_add_r2 = self.csp.public_key.encrypt(x_add_r1 * y_add_r2)
             ex_add_r1_mul_y_add_r2.exponent = eRes.exponent
             sum_time += time.perf_counter() - starTim
@@ -143,11 +143,57 @@ class SecureComputing(object):
             er1_mul_r2 = self.cp.public_key.encrypt(r1 * r2)
             er1_mul_r2.exponent = ev1.exponent
             if ev1.exponent > 0:
-                return (ex_add_r1_mul_y_add_r2 + (ev1 * -r2) + (ev2 * -r1) - er1_mul_r2) / (10 ** ev1.exponent), sum_time
-                #return (ex_add_r1_mul_y_add_r2 + (ev1 * -r2) + (ev2 * -r1) - er1_mul_r2) / (2 ** ev1.exponent)
+                return (ex_add_r1_mul_y_add_r2 + ((ev1 * r2) + (ev2 * r1) +er1_mul_r2)*(self.cp.n-1)) / (10 ** ev1.exponent), sum_time
+
             else:
-                #return ex_add_r1_mul_y_add_r2 + (ev1 * -r2) + (ev2 * -r1) - er1_mul_r2, sum_time
-                return ex_add_r1_mul_y_add_r2 + (ev1 * -r2) + (ev2 * -r1) - er1_mul_r2, sum_time
+                return ex_add_r1_mul_y_add_r2 + ((ev1 * r2) + (ev2 * r1) +er1_mul_r2)*(self.cp.n-1), sum_time
+    # def smul(self, ev1, ev2, sigm_len=None):
+    #
+    #     if ev1.public_key != ev2.public_key:
+    #         raise Exception('an error operation')
+    #     elif ev1.exponent != ev2.exponent:
+    #         raise Exception('ev1 (ev1.exponent=%i) should has the same exponent with ev2 (ev2.exponent=%i)'
+    #                         % (ev1.exponent, ev2.exponent))
+    #     else:
+    #         if sigm_len is None:
+    #             sigm_len = self.DEFAULT_SIGMA
+    #
+    #         # L = 10 ** (sigm_len // 3)
+    #         L = 2 ** (sigm_len + 2)
+    #
+    #         # Step-1
+    #         starTim = time.perf_counter()
+    #         r1 = self.get_random_with_sigmbits(sigm_len)
+    #         r2 = self.get_random_with_sigmbits(sigm_len)
+    #         er1 = self.cp.public_key.encrypt(r1)
+    #         er2 = self.cp.public_key.encrypt(r2)
+    #         er1.exponent = er2.exponent = ev1.exponent
+    #
+    #         ev1_add_r1 = ev1 + er1
+    #         ev2_add_r2 = ev2 + er2
+    #         eRes = (ev1_add_r1 * L) + ev2_add_r2
+    #         eRes1 = self.cp.partial_decrypt(eRes)
+    #         sum_time = time.perf_counter() - starTim
+    #
+    #         # Step-2
+    #         starTim = time.perf_counter()
+    #         eRes2 = self.csp.partial_decrypt(eRes)
+    #         Res = self.csp.final_decrypt(eRes1, eRes2)
+    #         x_add_r1 = Res // L
+    #         y_add_r2 = Res % L
+    #         ex_add_r1_mul_y_add_r2 = self.csp.public_key.encrypt(x_add_r1 * y_add_r2)
+    #         ex_add_r1_mul_y_add_r2.exponent = eRes.exponent
+    #         sum_time += time.perf_counter() - starTim
+    #
+    #         # Step-3
+    #         er1_mul_r2 = self.cp.public_key.encrypt(r1 * r2)
+    #         er1_mul_r2.exponent = ev1.exponent
+    #         if ev1.exponent > 0:
+    #             return (ex_add_r1_mul_y_add_r2 + (ev1 * -r2) + (ev2 * -r1) - er1_mul_r2) / (10 ** ev1.exponent), sum_time
+    #             #return (ex_add_r1_mul_y_add_r2 + (ev1 * -r2) + (ev2 * -r1) - er1_mul_r2) / (2 ** ev1.exponent)
+    #         else:
+    #             #return ex_add_r1_mul_y_add_r2 + (ev1 * -r2) + (ev2 * -r1) - er1_mul_r2, sum_time
+    #             return ex_add_r1_mul_y_add_r2 + (ev1 * -r2) + (ev2 * -r1) - er1_mul_r2, sum_time
 
     def conv_smul(self, ev1, ev2, sigm_len=None):
 
