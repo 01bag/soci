@@ -344,6 +344,10 @@ class PaillierPrivateKey(object):
         self.p_inverse = invert(self.p, self.q)
         self.hp = self.h_function(self.p, self.psquare)
         self.hq = self.h_function(self.q, self.qsquare)
+        self.lamda=(self.p-1)*(self.q-1)#self.lcm((self.p)-1,(self.q)-1)
+        self.nsquare=public_key.n*public_key.n
+        self.u=invert(self.lamda,self.public_key.n)
+
 
     @staticmethod
     def from_totient(public_key, totient):
@@ -458,9 +462,11 @@ class PaillierPrivateKey(object):
             raise TypeError('Expected ciphertext to be an int, not: %s' %
                 type(ciphertext))
 
-        decrypt_to_p = self.l_function(powmod(ciphertext, self.p-1, self.psquare), self.p) * self.hp % self.p
-        decrypt_to_q = self.l_function(powmod(ciphertext, self.q-1, self.qsquare), self.q) * self.hq % self.q
-        return self.crt(decrypt_to_p, decrypt_to_q)
+        #decrypt_to_p = self.l_function(powmod(ciphertext, self.p-1, self.psquare), self.p) * self.hp % self.p
+        #decrypt_to_q = self.l_function(powmod(ciphertext, self.q-1, self.qsquare), self.q) * self.hq % self.q
+        #return self.crt(decrypt_to_p, decrypt_to_q)
+        plaintext=self.l_function(powmod(ciphertext,self.lamda,self.nsquare),self.public_key.n)*self.u % self.public_key.n
+        return plaintext
 
     def h_function(self, x, xsquare):
         """Computes the h-function as defined in Paillier's paper page 12,
@@ -472,6 +478,15 @@ class PaillierPrivateKey(object):
         """Computes the L function as defined in Paillier's paper. That is: L(x,p) = (x-1)/p"""
         return (x - 1) // p
 
+    def lcm(self,m, n):
+        if m < n:
+            m, n = n, m
+        r = m % n
+        while r:
+            m = n
+            n = r
+            r = m % n
+        return n
     def crt(self, mp, mq):
         """The Chinese Remainder Theorem as needed for decryption. Returns the solution modulo n=pq.
 
