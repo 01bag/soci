@@ -3,7 +3,7 @@ import math
 
 
 
-
+# include encode and decode
 def dele(a,b):
     a=a-b
     return a

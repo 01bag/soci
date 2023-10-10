@@ -31,6 +31,7 @@ from util import invert, powmod, getprimeover, isqrt, extended_euclidean_algorit
 # Paillier cryptosystem is based on integer factorisation.
 # The default is chosen to give a minimum of 128 bits of security.
 # https://www.keylength.com/en/4/
+# key size
 DEFAULT_KEYSIZE =3072
 DEFAULT_SIGMA = 128
 

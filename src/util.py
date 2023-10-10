@@ -32,6 +32,7 @@ except ImportError:
 
 # GMP's powmod has greater overhead than Python's pow, but is faster.
 # From a quick experiment on our machine, this seems to be the break even:
+# define _USE_MOD_FROM_GMP_SIZE
 _USE_MOD_FROM_GMP_SIZE = (1 << (8*2))
 
 def powmod(a, b, c):

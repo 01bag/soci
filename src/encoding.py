@@ -7,6 +7,7 @@ def dele(a,b):
     a=a-b
     return a
 
+#include encode and decode
 class EncodedNumber(object):
     """Represents a float or int encoded for Paillier encryption.
 

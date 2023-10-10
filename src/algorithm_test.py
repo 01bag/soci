@@ -8,6 +8,7 @@ import random
 
 
 from secomp.secureprotol import SecureComputing
+# for test
 
 public_key, private_key, partial_private_keys = paillier.generate_paillier_keypair(n_length=1024)
 cp = paillier.ThresholdPaillier(public_key, partial_private_keys.sk1)

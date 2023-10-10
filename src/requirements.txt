@@ -1,3 +1,3 @@
-#SOCI_algorithm
+#SOCI_algorithm for python
 # pip install -r requirements.txt
 numpy>=1.24.2

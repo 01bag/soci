@@ -5,6 +5,8 @@ import numpy as np
 from util import invert, powmod, getprimeover, isqrt, extended_euclidean_algorithm
 from encoding import EncodedNumber
 
+
+
 class SecureComputing(object):
     DEFAULT_SIGMA = 118
 
@@ -101,7 +103,7 @@ class SecureComputing(object):
 
         return ciphertexts
     def smul(self, ev1, ev2, sigm_len=None):
-
+        # Secure Multiplication Protocol
         if ev1.public_key != ev2.public_key:
             raise Exception('an error operation')
         elif ev1.exponent != ev2.exponent:
